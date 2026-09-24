@@ -1,0 +1,29 @@
+<main class="auth-page">
+  <a routerLink="/">← Back to recipes</a>
+  <section class="auth-card" aria-labelledby="confirmation-heading">
+    <h1 id="confirmation-heading">Confirm your email</h1>
+    @switch (status()) {
+      @case ('ready') {
+        <p>Press the button to confirm your email address. Opening this link alone does not confirm it.</p>
+        <button type="button" (click)="confirm()">Confirm email</button>
+      }
+      @case ('loading') {
+        <p role="status">Confirming your email…</p>
+        <button type="button" disabled>Confirming…</button>
+      }
+      @case ('success') {
+        <p role="status">Your email has been confirmed. You can now sign in.</p>
+        <a routerLink="/login">Go to sign in</a>
+      }
+      @case ('invalid') {
+        <p role="alert">This confirmation link is invalid or has already been used.</p>
+        <a routerLink="/resend-confirmation">Request another confirmation email</a>
+      }
+      @case ('error') {
+        <p role="alert">Confirmation could not be completed. The server may have processed the request.</p>
+        <button type="button" (click)="confirm()">Try again</button>
+        <p><a routerLink="/login">Try signing in</a> or <a routerLink="/resend-confirmation">request another email</a>.</p>
+      }
+    }
+  </section>
+</main>

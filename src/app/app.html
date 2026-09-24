@@ -1,1 +1,24 @@
+<nav class="site-nav" aria-label="Main navigation">
+  <a routerLink="/">Recipes</a>
+  <div class="account-links">
+    @switch (session.status()) {
+      @case ('authenticated') {
+        <span>{{ session.user()?.firstName }}</span>
+        <button type="button" (click)="logout()">Log out</button>
+      }
+      @case ('restoring') {
+        <span role="status">Checking session…</span>
+      }
+      @case ('verification-error') {
+        <span>Session could not be checked.</span>
+        <button type="button" (click)="session.restore()">Retry</button>
+        <button type="button" (click)="logout()">Log out</button>
+      }
+      @default {
+        <a routerLink="/login">Sign in</a>
+        <a routerLink="/register">Register</a>
+      }
+    }
+  </div>
+</nav>
 <router-outlet />
