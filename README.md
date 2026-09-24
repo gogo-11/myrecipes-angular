@@ -17,7 +17,7 @@ npm install
 npm start
 ```
 
-Open `http://localhost:4200/`. The Angular development server proxies `/api/**` to `http://localhost:8081`; the app requests `/api/v1/recipes?page=0&size=6` for the list and `/api/v1/recipes/{id}` for details. Recipe images use the same proxy. Run `npm run build` to check the production bundle.
+Open `http://localhost:4200/`. The Angular development server proxies `/api/**` to `http://localhost:8081`. The public list requests `/api/v1/recipes` with `page`, `size`, and optional `keyword` and `category` parameters. Search, category, and page are kept in the browser URL, including links to recipe details and back. Recipe details and images use the same proxy. Run `npm run build` to check the production bundle and `npm test -- --watch=false` for the component tests.
 
 ## Nutrition API follow-up
 

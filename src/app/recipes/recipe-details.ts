@@ -5,6 +5,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subject, Subscription, catchError, combineLatest, map, of, startWith, switchMap } from 'rxjs';
 import { NutritionEstimateResponse, RecipeDetailsResponse } from './recipe.models';
+import { parseRecipeListQuery, recipeListQueryParams } from './recipe-list-query';
 
 type DetailsStatus = 'loading' | 'ready' | 'not-found' | 'error';
 type NutritionStatus = 'idle' | 'loading' | 'available' | 'unavailable' | 'error';
@@ -31,11 +32,9 @@ export class RecipeDetails {
     const author = this.recipe()?.author;
     return [author?.firstName, author?.lastName].filter(Boolean).join(' ') || 'Unknown author';
   });
-  protected readonly backQueryParams = (() => {
-    const rawPage = this.route.snapshot.queryParamMap.get('page');
-    const page = Number(rawPage);
-    return rawPage !== null && Number.isSafeInteger(page) && page >= 0 ? { page } : null;
-  })();
+  protected readonly backQueryParams = recipeListQueryParams(
+    parseRecipeListQuery(this.route.snapshot.queryParamMap),
+  );
 
   constructor() {
     combineLatest([this.route.paramMap, this.retryRequest.pipe(startWith(void 0))])
