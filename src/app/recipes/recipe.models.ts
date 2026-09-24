@@ -25,3 +25,24 @@ export interface RecipePageResponse {
   first: boolean;
   last: boolean;
 }
+
+export interface AuthorSummaryResponse {
+  id: number;
+  firstName: string | null;
+  lastName: string | null;
+}
+
+export interface RecipeDetailsResponse extends RecipeSummaryResponse {
+  products: string | null;
+  cookingSteps: string | null;
+  author: AuthorSummaryResponse;
+}
+
+export interface NutritionEstimateResponse {
+  calories: number | null;
+  proteinGrams: number | null;
+  carbohydratesGrams: number | null;
+  fatGrams: number | null;
+  notes: string | null;
+  estimatedAt: string | null;
+}

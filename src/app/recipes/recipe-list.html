@@ -30,27 +30,29 @@
         <div class="recipe-grid">
           @for (recipe of result.content; track recipe.id) {
             <article class="recipe-card">
-              <div class="recipe-image">
-                @if (recipe.imageUrl && !failedImages().has(recipe.id)) {
-                  <img [ngSrc]="recipe.imageUrl" [alt]="recipe.recipeName" fill (error)="imageFailed(recipe.id)" />
-                } @else {
-                  <span aria-hidden="true">🍽</span>
-                }
-              </div>
-              <div class="recipe-body">
-                @if (recipe.category) {
-                  <p class="category">{{ recipe.category }}</p>
-                }
-                <h3>{{ recipe.recipeName }}</h3>
-                <div class="recipe-meta">
-                  @if (recipe.cookingTime !== null) {
-                    <span>{{ recipe.cookingTime }} min</span>
-                  }
-                  @if (recipe.portions !== null) {
-                    <span>{{ recipe.portions }} portions</span>
+              <a class="recipe-link" [routerLink]="['/recipes', recipe.id]" [queryParams]="{ page: result.page }" [attr.aria-label]="'View recipe: ' + recipe.recipeName">
+                <div class="recipe-image">
+                  @if (recipe.imageUrl && !failedImages().has(recipe.id)) {
+                    <img [ngSrc]="recipe.imageUrl" [alt]="recipe.recipeName" fill (error)="imageFailed(recipe.id)" />
+                  } @else {
+                    <span aria-hidden="true">🍽</span>
                   }
                 </div>
-              </div>
+                <div class="recipe-body">
+                  @if (recipe.category) {
+                    <p class="category">{{ recipe.category }}</p>
+                  }
+                  <h3>{{ recipe.recipeName }}</h3>
+                  <div class="recipe-meta">
+                    @if (recipe.cookingTime !== null) {
+                      <span>{{ recipe.cookingTime }} min</span>
+                    }
+                    @if (recipe.portions !== null) {
+                      <span>{{ recipe.portions }} portions</span>
+                    }
+                  </div>
+                </div>
+              </a>
             </article>
           }
         </div>
