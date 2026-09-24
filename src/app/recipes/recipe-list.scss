@@ -73,6 +73,47 @@ h1 {
   color: #555a50;
 }
 
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 16px;
+  margin: 12px 0 24px;
+}
+
+.filter-field {
+  display: grid;
+  flex: 1 1 230px;
+  gap: 6px;
+}
+
+.filter-field label {
+  font-weight: 700;
+}
+
+.filter-field input,
+.filter-field select {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid #59675b;
+  border-radius: 8px;
+  background: #fff;
+  color: #1b251c;
+  font: inherit;
+}
+
+.filter-field input:focus-visible,
+.filter-field select:focus-visible,
+button:focus-visible {
+  outline: 3px solid #265a42;
+  outline-offset: 2px;
+}
+
+.clear-button {
+  min-height: 44px;
+}
+
 .status,
 .empty-state {
   padding: 12px 0;

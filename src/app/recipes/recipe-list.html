@@ -15,6 +15,25 @@
       }
     </div>
 
+    <div class="filters" role="search" aria-label="Find recipes">
+      <div class="filter-field">
+        <label for="recipe-keyword">Search recipes</label>
+        <input id="recipe-keyword" #keywordInput type="search" [value]="keyword()" (input)="onKeywordInput(keywordInput.value)" autocomplete="off" />
+      </div>
+      <div class="filter-field">
+        <label for="recipe-category">Category</label>
+        <select id="recipe-category" #categorySelect (change)="onCategoryChange(categorySelect.value)">
+          <option value="" [selected]="category() === null">All categories</option>
+          @for (option of categories; track option.value) {
+            <option [value]="option.value" [selected]="category() === option.value">{{ option.label }}</option>
+          }
+        </select>
+      </div>
+      @if (hasFilters()) {
+        <button class="clear-button" type="button" (click)="clearFilters()">Clear filters</button>
+      }
+    </div>
+
     @if (loading()) {
       <p class="status" role="status">Loading recipes…</p>
     } @else if (error()) {
@@ -30,7 +49,7 @@
         <div class="recipe-grid">
           @for (recipe of result.content; track recipe.id) {
             <article class="recipe-card">
-              <a class="recipe-link" [routerLink]="['/recipes', recipe.id]" [queryParams]="{ page: result.page }" [attr.aria-label]="'View recipe: ' + recipe.recipeName">
+              <a class="recipe-link" [routerLink]="['/recipes', recipe.id]" [queryParams]="detailQueryParams()" [attr.aria-label]="'View recipe: ' + recipe.recipeName">
                 <div class="recipe-image">
                   @if (recipe.imageUrl && !failedImages().has(recipe.id)) {
                     <img [ngSrc]="recipe.imageUrl" [alt]="recipe.recipeName" fill (error)="imageFailed(recipe.id)" />
@@ -57,14 +76,21 @@
           }
         </div>
       } @else if (!loading() && !error()) {
-        <p class="empty-state">No recipes are available yet.</p>
+        <div class="empty-state">
+          @if (hasFilters()) {
+            <p>No recipes match these filters.</p>
+            <button type="button" (click)="clearFilters()">Clear filters</button>
+          } @else {
+            <p>No recipes are available yet.</p>
+          }
+        </div>
       }
 
       @if (result.totalPages > 0) {
         <nav class="pagination" aria-label="Recipe pages">
-          <button type="button" (click)="previousPage()" [disabled]="result.first" [attr.aria-disabled]="loading()">Previous</button>
+          <button type="button" (click)="previousPage()" [disabled]="result.first || loading()">Previous</button>
           <span aria-live="polite">{{ pageLabel() }}</span>
-          <button type="button" (click)="nextPage()" [disabled]="result.last" [attr.aria-disabled]="loading()">Next</button>
+          <button type="button" (click)="nextPage()" [disabled]="result.last || loading()">Next</button>
         </nav>
       }
     }

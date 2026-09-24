@@ -20,7 +20,7 @@ describe('RecipeDetails', () => {
           provide: ActivatedRoute,
           useValue: {
             paramMap: of(convertToParamMap({ id: '7' })),
-            snapshot: { queryParamMap: convertToParamMap({ page: '1' }) },
+            snapshot: { queryParamMap: convertToParamMap({ keyword: 'soup', category: 'SOUPS', page: '1' }) },
           },
         },
       ],
@@ -47,7 +47,7 @@ describe('RecipeDetails', () => {
     expect(text).toContain('Simmer');
     expect(text).toContain('Loading cached nutrition estimate');
     expect((fixture.nativeElement.querySelector('.back-link') as HTMLAnchorElement).getAttribute('href'))
-      .toBe('/?page=1');
+      .toBe('/?keyword=soup&category=SOUPS&page=1');
     expect((fixture.nativeElement.querySelector('.recipe-image img') as HTMLImageElement).getAttribute('src'))
       .toBe('/api/v1/recipes/7/image');
 
