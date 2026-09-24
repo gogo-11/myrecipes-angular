@@ -1,0 +1,70 @@
+<main class="page">
+  <header class="page-header">
+    <div class="brand">
+      <img ngSrc="/myrecipes-logo.png" alt="MyRecipes" fill priority />
+    </div>
+    <h1>Recipes to make and share</h1>
+    <p>Browse something delicious for your next meal.</p>
+  </header>
+
+  <section class="recipes" aria-labelledby="recipes-heading" [attr.aria-busy]="loading()">
+    <div class="section-heading">
+      <h2 id="recipes-heading">All recipes</h2>
+      @if (recipesPage(); as result) {
+        <p>{{ result.totalElements }} recipes</p>
+      }
+    </div>
+
+    @if (loading()) {
+      <p class="status" role="status">Loading recipes…</p>
+    } @else if (error()) {
+      <p class="status" role="alert">Recipes could not be loaded. Please try again.</p>
+    }
+
+    @if (error()) {
+      <button class="retry-button" type="button" (click)="retry()" [disabled]="loading()">Try again</button>
+    }
+
+    @if (recipesPage(); as result) {
+      @if (result.content.length) {
+        <div class="recipe-grid">
+          @for (recipe of result.content; track recipe.id) {
+            <article class="recipe-card">
+              <div class="recipe-image">
+                @if (recipe.imageUrl && !failedImages().has(recipe.id)) {
+                  <img [ngSrc]="recipe.imageUrl" [alt]="recipe.recipeName" fill (error)="imageFailed(recipe.id)" />
+                } @else {
+                  <span aria-hidden="true">🍽</span>
+                }
+              </div>
+              <div class="recipe-body">
+                @if (recipe.category) {
+                  <p class="category">{{ recipe.category }}</p>
+                }
+                <h3>{{ recipe.recipeName }}</h3>
+                <div class="recipe-meta">
+                  @if (recipe.cookingTime !== null) {
+                    <span>{{ recipe.cookingTime }} min</span>
+                  }
+                  @if (recipe.portions !== null) {
+                    <span>{{ recipe.portions }} portions</span>
+                  }
+                </div>
+              </div>
+            </article>
+          }
+        </div>
+      } @else if (!loading() && !error()) {
+        <p class="empty-state">No recipes are available yet.</p>
+      }
+
+      @if (result.totalPages > 0) {
+        <nav class="pagination" aria-label="Recipe pages">
+          <button type="button" (click)="previousPage()" [disabled]="result.first" [attr.aria-disabled]="loading()">Previous</button>
+          <span aria-live="polite">{{ pageLabel() }}</span>
+          <button type="button" (click)="nextPage()" [disabled]="result.last" [attr.aria-disabled]="loading()">Next</button>
+        </nav>
+      }
+    }
+  </section>
+</main>

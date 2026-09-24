@@ -2,6 +2,23 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.0.
 
+## Local browser test
+
+Start the Spring Boot API in a separate terminal from `D:\JAVA\test\myrecipe` with its existing database configuration. Its checked-in configuration uses port 8081, so override it to match this frontend's proxy:
+
+```powershell
+.\mvnw.cmd spring-boot:run "-Dspring-boot.run.arguments=--server.port=8080"
+```
+
+Then, from this frontend directory, run:
+
+```powershell
+npm install
+npm start
+```
+
+Open `http://localhost:4200/`. The Angular development server proxies `/api/**` to `http://localhost:8080`; the app requests `/api/v1/recipes?page=0&size=6` and uses the same proxy for recipe images. Run `npm run build` to check the production bundle.
+
 ## Development server
 
 To start a local development server, run:
