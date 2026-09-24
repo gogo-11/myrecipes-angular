@@ -1,11 +1,12 @@
 import { NgOptimizedImage } from '@angular/common';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subject, Subscription, catchError, combineLatest, map, of, startWith, switchMap } from 'rxjs';
 import { NutritionEstimateResponse, RecipeDetailsResponse } from './recipe.models';
 import { parseRecipeListQuery, recipeListQueryParams } from './recipe-list-query';
+import { RecipeApiService } from './recipe-api.service';
 
 type DetailsStatus = 'loading' | 'ready' | 'not-found' | 'error';
 type NutritionStatus = 'idle' | 'loading' | 'available' | 'unavailable' | 'error';
@@ -17,7 +18,7 @@ type NutritionStatus = 'idle' | 'loading' | 'available' | 'unavailable' | 'error
   styleUrl: './recipe-details.scss',
 })
 export class RecipeDetails {
-  private readonly http = inject(HttpClient);
+  private readonly recipeApi = inject(RecipeApiService);
   private readonly route = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
   private readonly retryRequest = new Subject<void>();
@@ -53,7 +54,7 @@ export class RecipeDetails {
             return of({ kind: 'not-found' } as const);
           }
 
-          return this.http.get<RecipeDetailsResponse>(`/api/v1/recipes/${id}`).pipe(
+          return this.recipeApi.getPublicRecipe(id).pipe(
             map((recipe) => ({ kind: 'ready' as const, recipe })),
             catchError((error: unknown) =>
               of({
@@ -90,8 +91,8 @@ export class RecipeDetails {
     this.nutritionRequest?.unsubscribe();
     this.nutrition.set(null);
     this.nutritionStatus.set('loading');
-    this.nutritionRequest = this.http
-      .get<NutritionEstimateResponse>(`/api/v1/recipes/${id}/nutrition`, { observe: 'response' })
+    this.nutritionRequest = this.recipeApi
+      .getCachedNutrition(id)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {

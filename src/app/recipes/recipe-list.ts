@@ -1,10 +1,10 @@
 import { NgOptimizedImage } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subject, Subscription, distinctUntilChanged, map, switchMap, takeUntil, timer } from 'rxjs';
 import { RecipeCategory, RecipePageResponse } from './recipe.models';
+import { RecipeApiService } from './recipe-api.service';
 import {
   RecipeListQuery,
   parseRecipeListQuery,
@@ -20,7 +20,7 @@ import {
   styleUrl: './recipe-list.scss',
 })
 export class RecipeList {
-  private readonly http = inject(HttpClient);
+  private readonly recipeApi = inject(RecipeApiService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -143,12 +143,8 @@ export class RecipeList {
     this.error.set(false);
     this.recipesPage.set(null);
 
-    const params: Record<string, string | number> = { page: query.page, size: this.pageSize };
-    if (query.keyword) params['keyword'] = query.keyword;
-    if (query.category) params['category'] = query.category;
-
-    this.activeRequest = this.http
-      .get<RecipePageResponse>('/api/v1/recipes', { params })
+    this.activeRequest = this.recipeApi
+      .getPublicRecipes(query, this.pageSize)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (result) => {
