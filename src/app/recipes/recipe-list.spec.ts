@@ -1,6 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { RecipeList } from './recipe-list';
 import { RecipePageResponse } from './recipe.models';
 
@@ -10,7 +11,7 @@ describe('RecipeList', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [RecipeList],
-      providers: [provideHttpClient(), provideHttpClientTesting()],
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])],
     }).compileComponents();
     http = TestBed.inject(HttpTestingController);
   });
@@ -27,6 +28,8 @@ describe('RecipeList', () => {
     fixture.detectChanges();
 
     expect(fixture.nativeElement.textContent).toContain('Vegetable soup');
+    expect((fixture.nativeElement.querySelector('.recipe-link') as HTMLAnchorElement).getAttribute('href'))
+      .toBe('/recipes/1?page=0');
     const buttons = fixture.nativeElement.querySelectorAll('nav button') as NodeListOf<HTMLButtonElement>;
     expect(buttons[0].disabled).toBe(true);
     expect(buttons[1].disabled).toBe(false);

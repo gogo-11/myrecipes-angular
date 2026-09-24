@@ -1,0 +1,97 @@
+<main class="details-page">
+  <a class="back-link" routerLink="/" [queryParams]="backQueryParams">← Back to recipes</a>
+
+  @switch (status()) {
+    @case ('loading') {
+      <section class="message" role="status">
+        <h1>Loading recipe…</h1>
+        <p>Getting the ingredients and cooking instructions.</p>
+      </section>
+    }
+    @case ('not-found') {
+      <section class="message" role="alert">
+        <h1>Recipe not found</h1>
+        <p>This recipe may have been removed or is not public.</p>
+      </section>
+    }
+    @case ('error') {
+      <section class="message" role="alert">
+        <h1>Unable to load recipe</h1>
+        <p>Something went wrong while contacting the recipe server.</p>
+        <button type="button" (click)="retry()">Try again</button>
+      </section>
+    }
+    @case ('ready') {
+      @if (recipe(); as item) {
+        <article>
+          <header class="recipe-header">
+            <p class="category">{{ item.category || 'Uncategorized' }}</p>
+            <h1>{{ item.recipeName }}</h1>
+            <p class="author">By {{ authorName() }}</p>
+          </header>
+
+          <div class="recipe-image">
+            @if (item.imageUrl && !imageFailed()) {
+              <img [ngSrc]="item.imageUrl" [alt]="'Photo of ' + item.recipeName" fill priority (error)="imageFailed.set(true)" />
+            } @else {
+              <img ngSrc="/recipe-placeholder.svg" alt="No recipe photo available" fill />
+            }
+          </div>
+
+          <dl class="recipe-facts">
+            <div><dt>Portions</dt><dd>{{ item.portions ?? 'Not specified' }}</dd></div>
+            <div><dt>Cooking time</dt><dd>{{ item.cookingTime !== null ? item.cookingTime + ' min' : 'Not specified' }}</dd></div>
+          </dl>
+
+          <div class="recipe-content">
+            <section aria-labelledby="products-heading">
+              <h2 id="products-heading">Products</h2>
+              <p class="multiline">{{ item.products || 'No products listed.' }}</p>
+            </section>
+            <section aria-labelledby="steps-heading">
+              <h2 id="steps-heading">Cooking steps</h2>
+              <p class="multiline">{{ item.cookingSteps || 'No cooking steps provided.' }}</p>
+            </section>
+          </div>
+
+          <section class="nutrition" aria-labelledby="nutrition-heading">
+            <h2 id="nutrition-heading">Nutrition per portion</h2>
+            @switch (nutritionStatus()) {
+              @case ('loading') {
+                <p role="status">Loading cached nutrition estimate…</p>
+              }
+              @case ('available') {
+                @if (nutrition(); as estimate) {
+                  <dl class="nutrition-values">
+                    @if (estimate.calories !== null) {
+                      <div><dt>Calories</dt><dd>{{ estimate.calories }} kcal</dd></div>
+                    }
+                    @if (estimate.proteinGrams !== null) {
+                      <div><dt>Protein</dt><dd>{{ estimate.proteinGrams }} g</dd></div>
+                    }
+                    @if (estimate.carbohydratesGrams !== null) {
+                      <div><dt>Carbohydrates</dt><dd>{{ estimate.carbohydratesGrams }} g</dd></div>
+                    }
+                    @if (estimate.fatGrams !== null) {
+                      <div><dt>Fat</dt><dd>{{ estimate.fatGrams }} g</dd></div>
+                    }
+                  </dl>
+                  @if (estimate.notes) {
+                    <p class="nutrition-notes">{{ estimate.notes }}</p>
+                  }
+                }
+              }
+              @case ('unavailable') {
+                <p>No cached nutrition estimate is available for this recipe yet.</p>
+              }
+              @case ('error') {
+                <p role="alert">Nutrition could not be loaded. The recipe is still available above.</p>
+                <button type="button" (click)="retryNutrition()">Retry nutrition</button>
+              }
+            }
+          </section>
+        </article>
+      }
+    }
+  }
+</main>

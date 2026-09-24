@@ -22,7 +22,7 @@
 
 .brand img {
   object-fit: cover;
-  object-position: center;
+  object-position: left;
 }
 
 .category {
@@ -90,6 +90,22 @@ h1 {
   border: 1px solid #e2e0d8;
   border-radius: 16px;
   background: #fff;
+}
+
+.recipe-card:focus-within {
+  outline: 3px solid #265a42;
+  outline-offset: 3px;
+}
+
+.recipe-link {
+  display: block;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+.recipe-link:hover h3 {
+  text-decoration: underline;
 }
 
 .recipe-image {

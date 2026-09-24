@@ -4,10 +4,10 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 
 ## Local browser test
 
-Start the Spring Boot API in a separate terminal from `D:\JAVA\test\myrecipe` with its existing database configuration. Its checked-in configuration uses port 8081, so override it to match this frontend's proxy:
+Start the Spring Boot API in a separate terminal from `D:\JAVA\test\myrecipe` with its existing database configuration. The API and frontend proxy both use port 8081:
 
 ```powershell
-.\mvnw.cmd spring-boot:run "-Dspring-boot.run.arguments=--server.port=8080"
+.\mvnw.cmd spring-boot:run
 ```
 
 Then, from this frontend directory, run:
@@ -17,7 +17,13 @@ npm install
 npm start
 ```
 
-Open `http://localhost:4200/`. The Angular development server proxies `/api/**` to `http://localhost:8080`; the app requests `/api/v1/recipes?page=0&size=6` and uses the same proxy for recipe images. Run `npm run build` to check the production bundle.
+Open `http://localhost:4200/`. The Angular development server proxies `/api/**` to `http://localhost:8081`; the app requests `/api/v1/recipes?page=0&size=6` for the list and `/api/v1/recipes/{id}` for details. Recipe images use the same proxy. Run `npm run build` to check the production bundle.
+
+## Nutrition API follow-up
+
+The details page requests only the cached estimate with `GET /api/v1/recipes/{id}/nutrition`, after the recipe loads. The current backend requires authentication for this GET. To enable public cached reads, permit only this numeric GET route and have its controller load the recipe through `getPublicRecipeById(id)` before checking the cache. Missing or private recipes should return 404; public recipes without a cached estimate should return 204.
+
+Keep nutrition generation separate. A future **„Изчисли хранителни стойности“** button should call `POST /api/v1/recipes/{id}/nutrition` only after an explicit click by an authenticated recipe owner or admin. Enforce ownership or admin role, public/private visibility, caching, and request limits on the server. The frontend currently makes no POST nutrition request.
 
 ## Development server
 
