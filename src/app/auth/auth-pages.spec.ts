@@ -12,7 +12,7 @@ describe('authentication pages', () => {
   let http: HttpTestingController;
 
   beforeEach(() => {
-    sessionStorage.clear();
+    localStorage.clear();
     TestBed.configureTestingModule({
       providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([
         { path: '', component: CheckEmail },
@@ -53,7 +53,7 @@ describe('authentication pages', () => {
     });
     await fixture.whenStable();
     expect(TestBed.inject(Router).url).toBe('/');
-    expect(sessionStorage.getItem('myrecipes-auth-session')).toContain('test-token');
+    expect(localStorage.getItem('myrecipes-auth-session')).toContain('test-token');
   });
 
   it('registers without logging in and navigates to check-email', async () => {
@@ -71,7 +71,7 @@ describe('authentication pages', () => {
     request.flush({ message: 'Check your email' });
     await fixture.whenStable();
     expect(TestBed.inject(Router).url).toBe('/check-email');
-    expect(sessionStorage.getItem('myrecipes-auth-session')).toBeNull();
+    expect(localStorage.getItem('myrecipes-auth-session')).toBeNull();
   });
 
   it('keeps the check-email instructions available without navigation state', () => {
