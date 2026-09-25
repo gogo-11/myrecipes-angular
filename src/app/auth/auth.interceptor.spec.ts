@@ -8,7 +8,7 @@ import { RecipeApiService } from '../recipes/recipe-api.service';
 
 describe('authInterceptor', () => {
   it('adds Bearer only to the protected user request', () => {
-    sessionStorage.clear();
+    localStorage.clear();
     TestBed.configureTestingModule({
       providers: [provideHttpClient(withInterceptors([authInterceptor])), provideHttpClientTesting()],
     });
