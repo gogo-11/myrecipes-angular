@@ -2,11 +2,11 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Router, provideRouter } from '@angular/router';
-import { CheckEmail } from './check-email';
+import { CheckEmail } from './check-email/check-email';
 import { AuthSessionService } from './auth-session.service';
-import { Login } from './login';
-import { Register } from './register';
-import { ResendConfirmation } from './resend-confirmation';
+import { Login } from './login/login';
+import { Register } from './register/register';
+import { ResendConfirmation } from './resend-confirmation/resend-confirmation';
 
 describe('authentication pages', () => {
   let http: HttpTestingController;

@@ -4,9 +4,9 @@ import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subject, Subscription, catchError, combineLatest, map, of, startWith, switchMap } from 'rxjs';
-import { NutritionEstimateResponse, RecipeDetailsResponse } from './recipe.models';
-import { parseRecipeListQuery, recipeListQueryParams } from './recipe-list-query';
-import { RecipeApiService } from './recipe-api.service';
+import { NutritionEstimateResponse, RecipeDetailsResponse } from '../recipe.models';
+import { parseRecipeListQuery, recipeListQueryParams } from '../recipe-list-query';
+import { RecipeApiService } from '../recipe-api.service';
 
 type DetailsStatus = 'loading' | 'ready' | 'not-found' | 'error';
 type NutritionStatus = 'idle' | 'loading' | 'available' | 'unavailable' | 'error';
