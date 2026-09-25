@@ -19,6 +19,8 @@ npm start
 
 Open `http://localhost:4200/`. The Angular development server proxies `/api/**` to `http://localhost:8081`. The public list requests `/api/v1/recipes` with `page`, `size`, and optional `keyword` and `category` parameters. Search, category, and page are kept in the browser URL, including links to recipe details and back. Recipe details and images use the same proxy. Run `npm run build` to check the production bundle and `npm test -- --watch=false` for the component tests.
 
+Sign in and registration are available from the top navigation. Registration requires email confirmation; the backend's `app.frontend-base-url` should point to `http://localhost:4200` for local email links. Opening a confirmation link does not use the token until the visitor presses **Confirm email**. Authentication lasts for the browser tab session and is checked against `/api/v1/users/me` after refresh.
+
 ## Nutrition API follow-up
 
 The details page requests only the cached estimate with `GET /api/v1/recipes/{id}/nutrition`, after the recipe loads. The current backend requires authentication for this GET. To enable public cached reads, permit only this numeric GET route and have its controller load the recipe through `getPublicRecipeById(id)` before checking the cache. Missing or private recipes should return 404; public recipes without a cached estimate should return 204.

@@ -1,0 +1,26 @@
+<main class="auth-page">
+  <a routerLink="/">← Back to recipes</a>
+  <section class="auth-card" aria-labelledby="login-heading">
+    <h1 id="login-heading">Sign in</h1>
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <label for="login-email">Email</label>
+      <input id="login-email" type="email" formControlName="email" autocomplete="email" [attr.aria-invalid]="form.controls.email.invalid && form.controls.email.touched" [attr.aria-describedby]="form.controls.email.invalid && form.controls.email.touched ? 'login-email-error' : null" />
+      @if (form.controls.email.invalid && form.controls.email.touched) {
+        <p id="login-email-error" class="field-error">Enter a valid email address.</p>
+      }
+      <label for="login-password">Password</label>
+      <input id="login-password" type="password" formControlName="password" autocomplete="current-password" [attr.aria-invalid]="form.controls.password.invalid && form.controls.password.touched" [attr.aria-describedby]="form.controls.password.invalid && form.controls.password.touched ? 'login-password-error' : null" />
+      @if (form.controls.password.invalid && form.controls.password.touched) {
+        <p id="login-password-error" class="field-error">Enter your password.</p>
+      }
+      @if (error()) {
+        <p role="alert">{{ error() }}</p>
+      }
+      <button type="submit" [disabled]="loading()">{{ loading() ? 'Signing in…' : 'Sign in' }}</button>
+    </form>
+    @if (invalidCredentials()) {
+      <p>If you still need to confirm your email, <a routerLink="/resend-confirmation">request another confirmation email</a>.</p>
+    }
+    <p>New here? <a routerLink="/register">Create an account</a>.</p>
+  </section>
+</main>
