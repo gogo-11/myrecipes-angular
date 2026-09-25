@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { AuthApiService } from './auth-api.service';
+import { AuthApiService } from '../auth-api.service';
 
 type ConfirmationStatus = 'ready' | 'loading' | 'success' | 'invalid' | 'error';
 

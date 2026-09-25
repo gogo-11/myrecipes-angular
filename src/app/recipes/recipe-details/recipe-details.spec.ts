@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { RecipeDetails } from './recipe-details';
-import { NutritionEstimateResponse, RecipeDetailsResponse } from './recipe.models';
+import { NutritionEstimateResponse, RecipeDetailsResponse } from '../recipe.models';
 
 describe('RecipeDetails', () => {
   let http: HttpTestingController;

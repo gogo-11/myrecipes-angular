@@ -3,15 +3,15 @@ import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subject, Subscription, distinctUntilChanged, map, switchMap, takeUntil, timer } from 'rxjs';
-import { RecipeCategory, RecipePageResponse } from './recipe.models';
-import { RecipeApiService } from './recipe-api.service';
+import { RecipeCategory, RecipePageResponse } from '../recipe.models';
+import { RecipeApiService } from '../recipe-api.service';
 import {
   RecipeListQuery,
   parseRecipeListQuery,
   recipeCategories,
   recipeListQueryParams,
   sameRecipeListQuery,
-} from './recipe-list-query';
+} from '../recipe-list-query';
 
 @Component({
   selector: 'app-recipe-list',

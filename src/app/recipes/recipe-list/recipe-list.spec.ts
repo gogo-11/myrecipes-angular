@@ -3,7 +3,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 import { Router, provideRouter } from '@angular/router';
 import { RecipeList } from './recipe-list';
-import { RecipePageResponse } from './recipe.models';
+import { RecipePageResponse } from '../recipe.models';
 
 describe('RecipeList', () => {
   let http: HttpTestingController;
